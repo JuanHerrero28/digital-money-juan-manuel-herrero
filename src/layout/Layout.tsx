@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Header from '@/components/common/Header';
+import Footer from '@/components/common/Footer';
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
@@ -13,14 +13,15 @@ const Wrapper = styled.div`
 
 type Props = {
   children: ReactNode;
+  simpleHeader?: boolean;
 };
 
-export default function Layout({ children }: Props) {
+export default function Layout({ children, simpleHeader = false }: Props) {
   return (
     <Wrapper>
-      <Header />
+      <Header onlyLogo={simpleHeader} />
       {children}
-      <Footer/>
+      <Footer />
     </Wrapper>
   );
 }

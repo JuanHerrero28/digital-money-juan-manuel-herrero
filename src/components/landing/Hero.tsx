@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import InfoCard from "./InfoCard";
+import InfoCard from "./components/InfoCard";
 
 const HeroContainer = styled.section`
   width: 100%;
