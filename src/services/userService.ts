@@ -1,3 +1,5 @@
+import { User } from "@/types/User";
+
 // src/services/userService.ts
 export const getUserById = async (userId: string, token: string) => {
     try {
@@ -26,5 +28,27 @@ export const getUserById = async (userId: string, token: string) => {
       return null;
     }
   };
+
+  export const updateUserById = async (
+    userId: string,
+    token: string,
+    data: User
+  ): Promise<User> => {
+    const res = await fetch(`https://digitalmoney.digitalhouse.com/api/users/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token, // sin 'Bearer'
+      },
+      body: JSON.stringify(data),
+    });
+  
+    if (!res.ok) {
+      throw new Error("Error al actualizar el usuario");
+    }
+  
+    return await res.json();
+  };
+
   
   

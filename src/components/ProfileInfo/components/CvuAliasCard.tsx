@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { FiCopy, FiCheck } from "react-icons/fi";
-import { useState } from "react";
+import { FiCopy, FiCheck, FiEdit2 } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import { getAccount, updateAlias } from "@/services/accountService";
 
 const Card = styled.div`
   background-color: #201f22;
@@ -29,6 +30,18 @@ const Value = styled.p`
   margin: 0.25rem 0 0;
 `;
 
+const Input = styled.input`
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #c1fd35;
+  color: white;
+  font-size: 1rem;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
 const IconButton = styled.button`
   background: none;
   border: none;
@@ -42,17 +55,60 @@ const IconButton = styled.button`
   }
 `;
 
+const SaveButton = styled.button`
+  margin-top: 1rem;
+  background-color: #c1fd35;
+  color: #201f22;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
 export default function CvuAliasCard() {
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [account, setAccount] = useState<any>(null);
+  const [editing, setEditing] = useState(false);
+  const [alias, setAlias] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    getAccount(token).then((data) => {
+      if (data) {
+        setAccount(data);
+        setAlias(data.alias);
+      }
+    });
+  }, []);
 
   const handleCopy = (value: string, field: string) => {
     navigator.clipboard.writeText(value);
     setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2000); // volver al ícono anterior después de 2s
+    setTimeout(() => setCopiedField(null), 2000);
   };
 
-  const cvu = "0000002100075320000000";
-  const alias = "estealiasnoexiste";
+  const handleSaveAlias = async () => {
+    const token = localStorage.getItem("token");
+    if (!token || !account) return;
+
+    try {
+      const updated = await updateAlias(account.id, token, alias);
+      setAccount(updated);
+      setAlias(updated.alias);
+      setEditing(false);
+    } catch (err) {
+      console.error("No se pudo actualizar el alias");
+    }
+  };
+
+  if (!account) return null;
 
   return (
     <Card>
@@ -63,9 +119,9 @@ export default function CvuAliasCard() {
       <Row>
         <Column>
           <Label>CVU</Label>
-          <Value>{cvu}</Value>
+          <Value>{account.cvu}</Value>
         </Column>
-        <IconButton onClick={() => handleCopy(cvu, "cvu")}>
+        <IconButton onClick={() => handleCopy(account.cvu, "cvu")}>
           {copiedField === "cvu" ? <FiCheck /> : <FiCopy />}
         </IconButton>
       </Row>
@@ -73,12 +129,19 @@ export default function CvuAliasCard() {
       <Row>
         <Column>
           <Label>Alias</Label>
-          <Value>{alias}</Value>
+          {editing ? (
+            <Input value={alias} onChange={(e) => setAlias(e.target.value)} />
+          ) : (
+            <Value>{account.alias}</Value>
+          )}
         </Column>
-        <IconButton onClick={() => handleCopy(alias, "alias")}>
-          {copiedField === "alias" ? <FiCheck /> : <FiCopy />}
+        <IconButton onClick={() => setEditing(!editing)}>
+          <FiEdit2 />
         </IconButton>
       </Row>
+
+      {editing && <SaveButton onClick={handleSaveAlias}>Guardar Alias</SaveButton>}
     </Card>
   );
 }
+

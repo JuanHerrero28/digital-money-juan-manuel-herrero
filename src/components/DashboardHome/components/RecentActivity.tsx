@@ -87,6 +87,12 @@ const mockData = [
   { id: 2, desc: "Transferiste a Consorcio", amount: "-$1265,57", date: "sábado" },
   { id: 3, desc: "Ingresaste dinero", amount: "+$1265,57", date: "sábado" },
   { id: 4, desc: "Te transfirieron dinero", amount: "+$1265,57", date: "sábado" },
+  { id: 4, desc: "Te transfirieron dinero", amount: "+$1265,57", date: "sábado" },
+  { id: 4, desc: "Te transfirieron dinero", amount: "+$1265,57", date: "sábado" },
+  { id: 4, desc: "Te transfirieron dinero", amount: "+$1265,57", date: "sábado" },
+  { id: 4, desc: "Te transfirieron dinero", amount: "+$1265,57", date: "sábado" },
+  { id: 4, desc: "Te transfirieron dinero", amount: "+$1265,57", date: "sábado" },
+  { id: 4, desc: "Te transfirieron dinero", amount: "+$1265,57", date: "sábado" },
 ];
 
 export default function RecentActivity() {
