@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import { accountIdAtom, tokenAtom } from "@/state/sessionAtoms";
 import { toast } from 'react-toastify';
 import { SkeletonBox } from "@/components/common/Skeleton";
+import { Tarjeta } from "@/types/Tarjeta";
 
 import styled from "styled-components";
 
@@ -131,7 +132,7 @@ export default function ActivityCards() {
       <Header>Tus tarjetas</Header>
       <List>
         {Array.isArray(tarjetas) && tarjetas.length > 0 ? (
-          tarjetas.map((item: any) => (
+          tarjetas.map((item: Tarjeta) => (
             <Item key={item.id}>
               <Left>
                 <Circle />
