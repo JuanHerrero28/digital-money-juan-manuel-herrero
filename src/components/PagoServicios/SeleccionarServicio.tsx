@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { Servicio } from "@/types/Servicio";
 
 
 const Container = styled.div`
@@ -114,7 +115,7 @@ export default function SeleccionarServicio() {
   };
 
   const serviciosFiltrados = servicios
-    ?.filter((s: any) => s.name.toLowerCase().includes(search.toLowerCase()))
+    ?.filter((s: Servicio) => s.name.toLowerCase().includes(search.toLowerCase()))
     .slice(0, 10);
 
   return (
@@ -131,7 +132,7 @@ export default function SeleccionarServicio() {
       {isLoading && <p>Cargando servicios...</p>}
       {error && <p>Ocurrió un error</p>}
       <ServiceList>
-        {serviciosFiltrados?.slice(0, 10).map((servicio: any) => (
+        {serviciosFiltrados?.slice(0, 10).map((servicio: Servicio) => (
           <ServiceItem key={servicio.id}>
             <span>{servicio.name}</span>
             <Button onClick={() => handleSelect(servicio.id, servicio.name)}>
