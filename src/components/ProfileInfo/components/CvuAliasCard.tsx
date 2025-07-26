@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { FiCopy, FiCheck, FiEdit2 } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { getAccount, updateAlias } from "@/services/accountService";
+import { useSetAtom } from "jotai";
+import { userCvuAtom } from "@/state/sessionAtoms";
 
 const Card = styled.div`
   background-color: #201f22;
@@ -70,11 +72,18 @@ const SaveButton = styled.button`
   }
 `;
 
-export default function CvuAliasCard() {
+// Agregamos las props
+interface CvuAliasCardProps {
+  onCopyCvu?: () => void;
+  onCopyAlias?: () => void;
+}
+
+export default function CvuAliasCard({ onCopyCvu, onCopyAlias }: CvuAliasCardProps) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [account, setAccount] = useState<any>(null);
   const [editing, setEditing] = useState(false);
   const [alias, setAlias] = useState("");
+  const setUserCvu = useSetAtom(userCvuAtom);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -84,6 +93,7 @@ export default function CvuAliasCard() {
       if (data) {
         setAccount(data);
         setAlias(data.alias);
+         setUserCvu(data.cvu);
       }
     });
   }, []);
@@ -91,6 +101,9 @@ export default function CvuAliasCard() {
   const handleCopy = (value: string, field: string) => {
     navigator.clipboard.writeText(value);
     setCopiedField(field);
+    if (field === "cvu" && onCopyCvu) onCopyCvu();
+    if (field === "alias" && onCopyAlias) onCopyAlias();
+
     setTimeout(() => setCopiedField(null), 2000);
   };
 
@@ -113,7 +126,7 @@ export default function CvuAliasCard() {
   return (
     <Card>
       <p style={{ marginBottom: "1.5rem", fontSize: "0.9rem" }}>
-        Copiá tu cvu o alias para ingresar o transferir dinero desde otra cuenta
+        Copiá tu CVU o alias para ingresar o transferir dinero desde otra cuenta
       </p>
 
       <Row>
@@ -135,13 +148,22 @@ export default function CvuAliasCard() {
             <Value>{account.alias}</Value>
           )}
         </Column>
-        <IconButton onClick={() => setEditing(!editing)}>
-          <FiEdit2 />
-        </IconButton>
+
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          {!editing && (
+            <IconButton onClick={() => handleCopy(account.alias, "alias")}>
+              {copiedField === "alias" ? <FiCheck /> : <FiCopy />}
+            </IconButton>
+          )}
+          <IconButton onClick={() => setEditing(!editing)}>
+            <FiEdit2 />
+          </IconButton>
+        </div>
       </Row>
 
-      {editing && <SaveButton onClick={handleSaveAlias}>Guardar Alias</SaveButton>}
+      {editing && (
+        <SaveButton onClick={handleSaveAlias}>Guardar Alias</SaveButton>
+      )}
     </Card>
   );
 }
-

@@ -9,6 +9,7 @@ export async function logoutUser(): Promise<void> {
       },
     });
   
+    
     localStorage.removeItem('token');
   }
   

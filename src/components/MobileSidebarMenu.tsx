@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { BsX } from "react-icons/bs";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 import { LogoutButton } from "./common/LogoutButton";
 import { useUserInfo } from "@/hooks/useUserInfo";
 
@@ -77,11 +76,11 @@ const ButtonText = styled.button<{ $active?: boolean; $secondary?: boolean }>`
 type Props = {
   userName: string;
   onClose: () => void;
-  setActiveSection: (section: string) => void; // <-- clave para cambiar vista desde componente padre
+  setActiveSection: (section: string) => void;
 };
 
 export default function MobileSidebarMenu({
-  userName,
+  
   onClose,
   setActiveSection,
 }: Props) {
@@ -126,19 +125,19 @@ export default function MobileSidebarMenu({
               <ButtonText onClick={() => handleSectionClick("actividad")}>
                 Actividad
               </ButtonText>
+              <ButtonText onClick={() => handleSectionClick("CargarDinero")}>
+                Cargar dinero
+              </ButtonText>
               <ButtonText onClick={() => handleSectionClick("perfil")}>
                 Tu Perfil
               </ButtonText>
-              <ButtonText onClick={() => handleSectionClick("cargar")}>
-                Cargar Dinero
-              </ButtonText>
-              <ButtonText onClick={() => handleSectionClick("servicios")}>
+              <ButtonText onClick={() => handleSectionClick("pagarServicios")}>
                 Pagar Servicios
               </ButtonText>
               <ButtonText onClick={() => handleSectionClick("tarjetas")}>
                 Tarjetas
               </ButtonText>
-              <LogoutButton/>
+              <LogoutButton />
             </NavList>
           </MenuContainer>
         </AnimatedMenuContainer>

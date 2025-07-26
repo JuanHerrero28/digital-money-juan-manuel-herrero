@@ -26,19 +26,15 @@ const ActionButton = styled.button`
   }
 `;
 
-type ActionButtonsProps = {
-  onLoadMoney?: () => void;
-  onPayServices?: () => void;
-};
+interface ActionButtonsProps {
+  setActiveSection: (section: string) => void;
+}
 
-export default function ActionButtons({
-  onLoadMoney,
-  onPayServices,
-}: ActionButtonsProps) {
+export default function ActionButtons({ setActiveSection }: ActionButtonsProps) {
   return (
     <ButtonContainer>
-      <ActionButton onClick={onLoadMoney}>Cargar dinero</ActionButton>
-      <ActionButton onClick={onPayServices}>Pago de servicios</ActionButton>
+      <ActionButton onClick={() => setActiveSection("CargarDinero")}>Cargar dinero</ActionButton>
+      <ActionButton onClick={() => setActiveSection("pagarServicios")}>Pago de servicios</ActionButton>
     </ButtonContainer>
   );
 }

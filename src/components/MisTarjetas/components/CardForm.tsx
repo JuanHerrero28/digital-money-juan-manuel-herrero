@@ -2,6 +2,14 @@ import { useState } from "react";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import styled from "styled-components";
+import { crearTarjeta } from "@/services/cardService";
+import { useAtom } from "jotai";
+import { accountIdAtom, tokenAtom } from "@/state/sessionAtoms";
+import { toast } from 'react-toastify';
+import { useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { obtenerTarjetas } from "@/services/cardService";
+
 
 const Container = styled.div`
   display: flex;
@@ -39,14 +47,19 @@ const Form = styled.form`
   border-radius: 12px;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; // 🔸 Cada input ocupa el 100%
+  }
 `;
+
 
 const FormControl = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   label {
     font-size: 0.85rem;
     font-weight: 500;
@@ -61,6 +74,8 @@ const FormControl = styled.div`
     color: #201f22;
     background-color: white;
     outline: none;
+    width: 100%;
+
     &:focus {
       border-color: #c1fd35;
     }
@@ -69,6 +84,10 @@ const FormControl = styled.div`
 
 const FullWidth = styled.div`
   grid-column: span 2;
+
+  @media (max-width: 768px) {
+    grid-column: span 1;
+  }
 `;
 
 const SubmitButton = styled.button`
@@ -89,6 +108,9 @@ const SubmitButton = styled.button`
 `;
 
 export default function CardForm({ onCancel }: { onCancel: () => void }) {
+  const queryClient = useQueryClient();
+  const [accountId] = useAtom(accountIdAtom); // ✅ LEE DESDE ÁTOMOS
+  const [token] = useAtom(tokenAtom);
   const [cardData, setCardData] = useState({
     number: "",
     name: "",
@@ -96,6 +118,15 @@ export default function CardForm({ onCancel }: { onCancel: () => void }) {
     cvc: "",
     focus: "" as "number" | "name" | "expiry" | "cvc" | "",
   });
+
+  const {
+  data: tarjetas,
+  
+} = useQuery({
+  queryKey: ["tarjetas"],
+  queryFn: () => obtenerTarjetas(token!, accountId!),
+  enabled: !!token && !!accountId,
+});
 
   const { number, name, expiry, cvc, focus } = cardData;
 
@@ -107,12 +138,63 @@ export default function CardForm({ onCancel }: { onCancel: () => void }) {
     setCardData({ ...cardData, focus: e.target.name as typeof focus });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if ([number, name, expiry, cvc].includes("")) return;
-    setCardData({ number: "", name: "", expiry: "", cvc: "", focus: "" });
-    onCancel();
+
+     if (tarjetas && tarjetas.length >= 10) {
+    toast.error("Solo se permiten hasta 10 tarjetas registradas.");
+    return;
+  }
+
+    if (!number || !name || !expiry || !cvc) {
+    toast.error("Todos los campos son obligatorios");
+    return;
+  }
+
+  if (!/^\d{16}$/.test(number)) {
+    toast.error("El número de tarjeta debe tener 16 dígitos");
+    return;
+  }
+
+  if (name.trim().length < 5) {
+    toast.error("Ingresá el nombre y apellido completo");
+    return;
+  }
+
+    if (!/^\d{4}$/.test(expiry)) {
+      toast.error("La fecha de vencimiento debe tener 4 dígitos (MMYY), por ejemplo: 0825");
+      return;
+    }
+
+    const month = parseInt(expiry.slice(0, 2), 10);
+    if (month < 1 || month > 12) {
+      toast.error("El mes de vencimiento debe estar entre 01 y 12");
+      return;
+    }
+
+    if (!token || !accountId) {
+      toast.error("Sesión expirada. Volvé a iniciar sesión.");
+      return;
+    }
+
+    try {
+      const result = await crearTarjeta(token, accountId, {
+        number,
+        name,
+        expiry,
+        cvc,
+      });
+
+       toast.success("🎉 Tarjeta cargada con éxito", result);
+       queryClient.invalidateQueries({ queryKey: ['tarjetas'] });
+
+      setCardData({ number: "", name: "", expiry: "", cvc: "", focus: "" });
+      onCancel();
+    } catch (error) {
+      console.error("Error creando tarjeta:", error);
+    }
   };
+  
 
   return (
     <Container>
@@ -126,6 +208,7 @@ export default function CardForm({ onCancel }: { onCancel: () => void }) {
         />
       </CardContainer>
       <Form onSubmit={handleSubmit}>
+        {/* campos */}
         <FormControl>
           <label htmlFor="number">Número de la tarjeta*</label>
           <input

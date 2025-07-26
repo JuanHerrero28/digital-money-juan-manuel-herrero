@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLogin } from "@/hooks/useLogin";
 import { useRouter } from "next/router";
+import Spinner from "../common/Spinner";
+import { useSetAtom } from "jotai";
+import { depositsAtom } from "@/state/depositAtoms";
 
 const Title = styled.h2`
   font-size: 16pt;
@@ -124,6 +127,8 @@ export default function LoginForm() {
     setStep(2);
   };
 
+  const setDeposits = useSetAtom(depositsAtom);
+
   const handleLogin = () => {
     if (!password) {
       setLocalError("Ingresá tu contraseña.");
@@ -134,6 +139,7 @@ export default function LoginForm() {
       { email, password },
       {
         onSuccess: () => {
+          setDeposits([]);
           router.push("/dashboard");
         },
       }
@@ -155,7 +161,7 @@ export default function LoginForm() {
           {localError && <ErrorMessage>{localError}</ErrorMessage>}
           <Button onClick={handleContinue}>Continuar</Button>
           {!hideCreateAccount && (
-            <SecondaryButton onClick={() => router.push('/register')}>
+            <SecondaryButton onClick={() => router.push("/register")}>
               Crear cuenta
             </SecondaryButton>
           )}
@@ -181,7 +187,7 @@ export default function LoginForm() {
             </ErrorMessage>
           )}
           <Button onClick={handleLogin} disabled={isPending}>
-            {isPending ? "Ingresando..." : "Iniciar sesión"}
+            {isPending ? <Spinner /> : "Iniciar sesión"}
           </Button>
         </>
       )}

@@ -23,9 +23,13 @@ const Container = styled.button`
 
 const Text = styled.span``;
 
-export default function GestionarMediosPago() {
+type Props = {
+  onClick: () => void;
+};
+
+export default function GestionarMediosPago({ onClick }: Props) {
   return (
-    <Container onClick={() => alert("Ir a medios de pago")}>
+    <Container onClick={onClick}>
       <Text>Gestioná los medios de pago</Text>
       <FiArrowRight size={20} />
     </Container>

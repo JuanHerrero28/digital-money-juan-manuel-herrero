@@ -68,6 +68,18 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 15pt;
     font-style: italic;
   }
+
+  .custom-toast {
+  background-color:rgb(255, 255, 255);
+  color:rgb(0, 0, 0);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 10pt;
+  border-radius: 8px;
+  border: 2px solid #C1FD35;
+  padding: 1rem;
+  text-align: center;
+  
+}
 `;
 
 

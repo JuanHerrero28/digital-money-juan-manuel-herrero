@@ -4,6 +4,7 @@ import { FiEdit2 } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { getUserById, updateUserById } from "@/services/userService";
 import { User } from "@/types/User";
+import { SkeletonBox } from "@/components/common/Skeleton";
 
 const Container = styled.div`
   background-color: white;
@@ -110,7 +111,22 @@ export default function MisDatos() {
     }
   };
 
-  if (!user || !form) return null;
+  if (!user || !form) {
+  return (
+    <Container>
+      <Header>Tus datos</Header>
+      {[...Array(5)].map((_, i) => (
+        <Row key={i}>
+          <Label>
+            <SkeletonBox width="60px" height="20px" />
+          </Label>
+          <SkeletonBox width="90%" height="20px" />
+          <SkeletonBox width="20px" height="20px" />
+        </Row>
+      ))}
+    </Container>
+  );
+}
 
   return (
     <Container>

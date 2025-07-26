@@ -44,11 +44,11 @@ export default function AddCardPrompt({ onClick }: { onClick?: () => void }) {
       <Left>
         <Label>Agregá tu tarjeta de débito o crédito</Label>
         <Action>
-          <FiPlus />
+          <FiPlus size={24} />
           Nueva tarjeta
         </Action>
       </Left>
-      <FiArrowRight size={18} />
+      <FiArrowRight size={24} />
     </Wrapper>
   );
 }

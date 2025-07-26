@@ -9,6 +9,8 @@ export type RegisterData = {
   
   export type RegisterResponse = {
     token: string;
+    user_id: number;
+    account_id: number;
   };
   
   export async function RegisterUser(dataRegister: RegisterData): Promise<RegisterResponse> {

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
 const SearchWrapper = styled.div`
@@ -9,7 +8,7 @@ const SearchWrapper = styled.div`
 
 const SearchInput = styled.input`
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem; /* espacio para la lupa */
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 1rem;
@@ -28,25 +27,20 @@ const Icon = styled(FaSearch)`
   color: #555;
 `;
 
-export default function SearchBar() {
-  const [query, setQuery] = useState("");
+type Props = {
+  onSearch: (value: string) => void;
+};
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      console.log("Buscar actividad con:", query);
-    }
-  };
-
+export default function SearchBar({ onSearch }: Props) {
   return (
     <SearchWrapper>
       <Icon />
       <SearchInput
         type="text"
         placeholder="Buscar en tu actividad"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={handleKeyDown}
+        onChange={(e) => onSearch(e.target.value)}
       />
     </SearchWrapper>
   );
 }
+

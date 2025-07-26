@@ -5,6 +5,9 @@ import styled from "styled-components";
 import { useRegister } from "@/hooks/useRegister";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useSetAtom } from "jotai";
+import { userIdAtom, accountIdAtom, tokenAtom } from "@/state/sessionAtoms";
+import Spinner from "../common/Spinner";
 
 const Container = styled.div`
   background-color: #201f22;
@@ -147,6 +150,9 @@ const Message = styled.p`
 
 export default function RegisterForm() {
   const router = useRouter();
+  const setUserId = useSetAtom(userIdAtom);
+  const setAccountId = useSetAtom(accountIdAtom);
+  const setToken = useSetAtom(tokenAtom);
   const { mutate: register, isPending } = useRegister();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -177,7 +183,15 @@ export default function RegisterForm() {
       confirmPassword,
       telefono,
     } = form;
-    if (!nombre || !apellido || !dni || !email || !password || !confirmPassword || !telefono) {
+    if (
+      !nombre ||
+      !apellido ||
+      !dni ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !telefono
+    ) {
       return "Completa los campos requeridos";
     }
     if (!/\S+@\S+\.\S+/.test(email)) {
@@ -186,7 +200,12 @@ export default function RegisterForm() {
     if (password !== confirmPassword) {
       return "Las contraseñas no coinciden";
     }
-    if (!/^.{6,20}$/.test(password) || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    if (
+      !/^.{6,20}$/.test(password) ||
+      !/[A-Z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
       return "La contraseña debe tener entre 6 y 20 caracteres e incluir al menos un número, una mayúscula y un carácter especial";
     }
     return "";
@@ -211,9 +230,18 @@ export default function RegisterForm() {
       },
       {
         onSuccess: (data) => {
+          // LocalStorage
+          localStorage.setItem("token", data.token);
           localStorage.setItem("user_id", String(data.user_id));
+          localStorage.setItem("account_id", String(data.account_id));
           localStorage.setItem("email", form.email);
           localStorage.setItem("fromRegister", "true");
+        
+          // Estado global con Jotai
+          setToken(data.token);
+          setUserId(data.user_id);
+          setAccountId(data.account_id);
+        
           setSuccess(true);
         },
         onError: () => {
@@ -235,7 +263,8 @@ export default function RegisterForm() {
             height={48}
           />
           <Message>
-            Hemos enviado un correo de confirmación para validar tu email, por favor revisalo para iniciar sesión
+            Hemos enviado un correo de confirmación para validar tu email, por
+            favor revisalo para iniciar sesión
           </Message>
           <ContinueButton onClick={() => router.push("/login")}>
             Continuar
@@ -279,7 +308,8 @@ export default function RegisterForm() {
         />
         <FullWidth>
           <small>
-            Usá entre 6 y 20 caracteres (debe contener al menos 1 carácter especial, una mayúscula y un número)
+            Usá entre 6 y 20 caracteres (debe contener al menos 1 carácter
+            especial, una mayúscula y un número)
           </small>
         </FullWidth>
         <InputWrapper>
@@ -304,7 +334,9 @@ export default function RegisterForm() {
             onChange={handleChange}
             hasError={!!error && !form.confirmPassword}
           />
-          <ToggleIcon onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+          <ToggleIcon
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          >
             {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
           </ToggleIcon>
         </InputWrapper>
@@ -316,7 +348,7 @@ export default function RegisterForm() {
           hasError={!!error && !form.telefono}
         />
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Creando cuenta..." : "Crear cuenta"}
+          {isPending ? <Spinner/> : "Crear cuenta"}
         </Button>
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </Form>

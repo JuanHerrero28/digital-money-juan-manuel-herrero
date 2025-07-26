@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useAccount } from "@/hooks/useAccount";
 import styled from "styled-components";
 
 const Card = styled.div`
@@ -44,7 +46,7 @@ const BottomLeft = styled.div`
 
   p {
     font-size: 1.5rem;
-    color:rgb(255, 255, 255);
+    color: white;
     font-weight: bold;
     margin: 0.5rem 0 0 0;
     border: 2px solid #c1fd35;
@@ -53,20 +55,59 @@ const BottomLeft = styled.div`
   }
 `;
 
+const Skeleton = styled.div`
+  width: 120px;
+  height: 32px;
+  border-radius: 2rem;
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-top: 0.5rem;
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+`;
+
 interface BalanceCardProps {
-  amount: string;
+  setActiveSection: (section: string) => void;
 }
 
-export default function BalanceCard({ amount }: BalanceCardProps) {
+export default function BalanceCard({ setActiveSection }: BalanceCardProps) {
+  const [isClient, setIsClient] = useState(false);
+  const { data, isLoading, error } = useAccount();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const formattedAmount = isClient && data?.available_amount?.toLocaleString("es-AR", {
+    style: "currency",
+    currency: "ARS",
+  });
+
+  if (!isClient) return null;
+
   return (
     <Card>
       <TopRightButtons>
-        <Button>Ver tarjetas</Button>
-        <Button>Ver CVU</Button>
+        <Button onClick={() => setActiveSection("tarjetas")}>Ver tarjetas</Button>
+        <Button onClick={() => setActiveSection("perfil")}>Ver CVU</Button>
       </TopRightButtons>
       <BottomLeft>
         <h4>Dinero disponible</h4>
-        <p>$ {amount}</p>
+        {isLoading ? (
+          <Skeleton />
+        ) : error || !data ? (
+          <p>Error</p>
+        ) : (
+          <p>{formattedAmount}</p>
+        )}
       </BottomLeft>
     </Card>
   );

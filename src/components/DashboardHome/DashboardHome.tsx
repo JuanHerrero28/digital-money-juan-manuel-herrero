@@ -1,9 +1,10 @@
+// src/components/DashboardHome/DashboardHome.tsx
 import BalanceCard from "./components/BalanceCard";
 import ActionButtons from "./components/ActionButtons";
 import SearchBar from "./components/SearchBar";
 import RecentActivity from "./components/RecentActivity";
 import styled from "styled-components";
-
+import { useState } from "react";
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,13 +12,20 @@ const Wrapper = styled.div`
   gap: 1rem;
 `;
 
-export default function DashboardHome() {
+type Props = {
+  setActiveSection: (section: string) => void;
+};
+
+export default function DashboardHome({ setActiveSection }: Props) {
+  const [searchTerm, setSearchTerm] = useState("");
+
   return (
     <Wrapper>
-      <BalanceCard amount="10.890.534,17" />
-      <ActionButtons />
-      <SearchBar />
-      <RecentActivity />
+      <BalanceCard setActiveSection={setActiveSection} />
+      <ActionButtons setActiveSection={setActiveSection} />
+      <SearchBar onSearch={setSearchTerm} />
+      <RecentActivity setActiveSection={setActiveSection} searchTerm={searchTerm} />
     </Wrapper>
   );
 }
+

@@ -4,13 +4,17 @@ import { useState } from "react";
 import Footer from "@/components/common/Footer";
 import { LogoutButton } from "@/components/common/LogoutButton";
 import DashboardHome from "@/components/DashboardHome/DashboardHome";
-import Actividad from "@/components/Actividad";
+import ActivityPage from "@/components/Actividad/ActivityPage";
 import ProfileInfo from "@/components/ProfileInfo/ProfileInfo";
 import MisTarjetas from "@/components/MisTarjetas/MisTarjetas";
+import CargarDineroSteps from "@/components/CargarDinero/CargarDineroSteps";
 import Head from "next/head";
 import Header from "@/components/common/Header";
 import MobileSidebarMenu from "@/components/MobileSidebarMenu";
-
+import { MoneyLoadProvider } from "@/context/MoneyLoadContext";
+import { ActividadProvider } from "@/context/ActividadContext";
+import { PagarServiciosProvider } from "@/context/PagarServiciosContext";
+import PagarServiciosSteps from "@/components/PagoServicios/PagarServiciosSteps";
 
 const DashboardContainer = styled.div`
   min-height: 100vh;
@@ -73,18 +77,6 @@ const ButtonText = styled.button`
   }
 `;
 
-const MobileMenuButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  padding: 1rem;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-
 export default function DashboardPage() {
   const [activeSection, setActiveSection] = useState("inicio");
   const [menuAbierto, setMenuAbierto] = useState(false);
@@ -95,49 +87,69 @@ export default function DashboardPage() {
       <Head>
         <title>Dashboard | DMH</title>
       </Head>
-      <DashboardContainer>
-        {/* PASAMOS EL CONTROL DEL MENÚ MOBILE */}
-        <Header onOpenMobileMenu={() => setMenuAbierto(true)} />
+      <ActividadProvider>
+        <DashboardContainer>
+          {/* PASAMOS EL CONTROL DEL MENÚ MOBILE */}
+          <Header onOpenMobileMenu={() => setMenuAbierto(true)} />
 
-        {/* SOLO EL DASHBOARD RENDERIZA EL MENÚ MOBILE */}
-        {menuAbierto && (
-          <MobileSidebarMenu
-            userName={userName}
-            onClose={() => setMenuAbierto(false)}
-            setActiveSection={setActiveSection}
-          />
-        )}
+          {/* SOLO EL DASHBOARD RENDERIZA EL MENÚ MOBILE */}
+          {menuAbierto && (
+            <MobileSidebarMenu
+              userName={userName}
+              onClose={() => setMenuAbierto(false)}
+              setActiveSection={setActiveSection}
+            />
+          )}
 
-        <ContentWrapper>
-          {/* Menú lateral de escritorio */}
-          <Sidebar>
-            <ButtonText onClick={() => setActiveSection("inicio")}>
-              Inicio
-            </ButtonText>
-            <ButtonText onClick={() => setActiveSection("actividad")}>
-              Actividad
-            </ButtonText>
-            <ButtonText onClick={() => setActiveSection("perfil")}>
-              Tu Perfil
-            </ButtonText>
-            <a href="#">Cargar dinero</a>
-            <a href="#">Pagar Servicios</a>
-            <ButtonText onClick={() => setActiveSection("tarjetas")}>
-              Tarjetas
-            </ButtonText>
-            <LogoutButton />
-          </Sidebar>
+          <ContentWrapper>
+            {/* Menú lateral de escritorio */}
+            <Sidebar>
+              <ButtonText onClick={() => setActiveSection("inicio")}>
+                Inicio
+              </ButtonText>
+              <ButtonText onClick={() => setActiveSection("actividad")}>
+                Actividad
+              </ButtonText>
+              <ButtonText onClick={() => setActiveSection("perfil")}>
+                Tu Perfil
+              </ButtonText>
+              <ButtonText onClick={() => setActiveSection("CargarDinero")}>
+                Cargar dinero
+              </ButtonText>
+              <ButtonText onClick={() => setActiveSection("pagarServicios")}>
+                Pagar Servicios
+              </ButtonText>
+              <ButtonText onClick={() => setActiveSection("tarjetas")}>
+                Tarjetas
+              </ButtonText>
+              <LogoutButton />
+            </Sidebar>
 
-          <Main>
-            {activeSection === "inicio" && <DashboardHome />}
-            {activeSection === "actividad" && <Actividad />}
-            {activeSection === "perfil" && <ProfileInfo />}
-            {activeSection === "tarjetas" && <MisTarjetas />}
-          </Main>
-        </ContentWrapper>
+            <Main>
+              {activeSection === "inicio" && (
+                <DashboardHome setActiveSection={setActiveSection} />
+              )}
+              {activeSection === "actividad" && <ActivityPage />}
+              {activeSection === "perfil" && (
+                <ProfileInfo setActiveSection={setActiveSection} />
+              )}
+              {activeSection === "tarjetas" && <MisTarjetas />}
+              {activeSection === "CargarDinero" && (
+                <MoneyLoadProvider>
+                  <CargarDineroSteps />
+                </MoneyLoadProvider>
+              )}
+              {activeSection === "pagarServicios" && (
+                <PagarServiciosProvider>
+                  <PagarServiciosSteps />
+                </PagarServiciosProvider>
+              )}
+            </Main>
+          </ContentWrapper>
 
-        <Footer />
-      </DashboardContainer>
+          <Footer />
+        </DashboardContainer>
+      </ActividadProvider>
     </>
   );
 }
