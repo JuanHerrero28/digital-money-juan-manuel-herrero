@@ -91,11 +91,12 @@ export default function ActivityCards() {
     error,
   } = useQuery({
     queryKey: ["tarjetas"],
-    queryFn: () => obtenerTarjetas(token, accountId),
+    enabled: !!token && !!accountId,
+    queryFn: () => obtenerTarjetas(token!, accountId!),
   });
 
   const mutation = useMutation({
-    mutationFn: (cardId: number) => eliminarTarjeta(token, accountId, cardId),
+    mutationFn: (cardId: number) => eliminarTarjeta(token!, accountId!, cardId),
     onSuccess: () => {
       toast.success("Tarjeta eliminada con éxito");
       queryClient.invalidateQueries({ queryKey: ["tarjetas"] });
