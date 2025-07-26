@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getAccount, updateAlias } from "@/services/accountService";
 import { useSetAtom } from "jotai";
 import { userCvuAtom } from "@/state/sessionAtoms";
+import { Account } from "@/types/Account";
 
 const Card = styled.div`
   background-color: #201f22;
@@ -78,9 +79,12 @@ interface CvuAliasCardProps {
   onCopyAlias?: () => void;
 }
 
-export default function CvuAliasCard({ onCopyCvu, onCopyAlias }: CvuAliasCardProps) {
+export default function CvuAliasCard({
+  onCopyCvu,
+  onCopyAlias,
+}: CvuAliasCardProps) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
-  const [account, setAccount] = useState<any>(null);
+  const [account, setAccount] = useState<Account | null>(null);
   const [editing, setEditing] = useState(false);
   const [alias, setAlias] = useState("");
   const setUserCvu = useSetAtom(userCvuAtom);
@@ -93,10 +97,10 @@ export default function CvuAliasCard({ onCopyCvu, onCopyAlias }: CvuAliasCardPro
       if (data) {
         setAccount(data);
         setAlias(data.alias);
-         setUserCvu(data.cvu);
+        setUserCvu(data.cvu);
       }
     });
-  }, []);
+  }, [setUserCvu]);
 
   const handleCopy = (value: string, field: string) => {
     navigator.clipboard.writeText(value);
@@ -116,7 +120,7 @@ export default function CvuAliasCard({ onCopyCvu, onCopyAlias }: CvuAliasCardPro
       setAccount(updated);
       setAlias(updated.alias);
       setEditing(false);
-    } catch (err) {
+    } catch {
       console.error("No se pudo actualizar el alias");
     }
   };
