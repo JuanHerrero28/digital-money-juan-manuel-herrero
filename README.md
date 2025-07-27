@@ -119,17 +119,10 @@ Carga de Dinero:
 
 ![Deposito Screenshot](public/screenshots/depoA.jpg)
 ![Transferencia Screenshot ](public/screenshots/transA.jpg)
-![Tarjetas Screenshot ](public/screenshots/tarjetaB.jpg)
-![Tarjetas Screenshot ](public/screenshots/tarjetac.jpg)
 
 Actividad:
 
 ![Filtros Screenshot](public/screenshots/filtrosA.jpg)
-
-
-Pagos de Servicios:
-
-![Servicios Screenshot](public/screenshots/ServicioA.jpg)
 
 
 ## ✍️ Autor / Equipo
