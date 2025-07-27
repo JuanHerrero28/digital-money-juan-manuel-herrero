@@ -108,28 +108,28 @@ A continuación se presentan capturas de las secciones clave de la aplicación:
 
 Login:
 
-![Login Screenshot](./screenshots/loginA.jpg)
-![Login Screenshot](./screenshots/loginB.jpg)
+![Login Screenshot](public/screenshots/loginA.jpg)
+![Login Screenshot](public/screenshots/loginB.jpg)
 
 Dashboard:
 
-![Dashboard Screenshot](./screenshots/perfilA.jpg)
+![Dashboard Screenshot](public/screenshots/perfilA.jpg)
 
 Carga de Dinero:
 
-![Deposito Screenshot](./screenshots/depoA.jpg)
-![Transferencia Screenshot ](./screenshots/transA.jpg)
-![Tarjetas Screenshot ](./screenshots/tarjetaB.jpg)
-![Tarjetas Screenshot ](./screenshots/tarjetac.jpg)
+![Deposito Screenshot](public/screenshots/depoA.jpg)
+![Transferencia Screenshot ](public/screenshots/transA.jpg)
+![Tarjetas Screenshot ](public/screenshots/tarjetaB.jpg)
+![Tarjetas Screenshot ](public/screenshots/tarjetac.jpg)
 
 Actividad:
 
-![Filtros Screenshot](./screenshots/filtrosA.jpg)
+![Filtros Screenshot](public/screenshots/filtrosA.jpg)
 
 
 Pagos de Servicios:
 
-![Servicios Screenshot](./screenshots/ServicioA.jpg)
+![Servicios Screenshot](public/screenshots/ServicioA.jpg)
 
 
 ## ✍️ Autor / Equipo
