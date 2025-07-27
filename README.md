@@ -4,7 +4,7 @@ Proyecto final de la carrera Certified Tech Developer - Especialización Fronten
 
 ---
 
-🔍 Descripción General
+## 🔍 Descripción General
 
 Digital Money House es una billetera virtual desarrollada con Next.js y TypeScript, que permite a los usuarios gestionar su dinero de forma intuitiva y segura. Incluye funcionalidades de registro/login, visualización de CVU y alias, carga de dinero con tarjetas, transferencias, gestión de tarjetas, pagos de servicios y visualización de actividad.
 
@@ -81,30 +81,6 @@ Antes de clonar este repositorio, asegurate de tener instalado:
 
    La app estará disponible en: http://localhost:3000
 
-## 📁 Estructura del Proyecto
-
-1. **Docker:**
-
-   ```bash
-  /digital-money
-├── public
-├── src
-│   ├── components
-│   ├── context
-│   ├── hooks
-│   ├── pages
-│   ├── services
-│   ├── state
-│   ├── styles
-│   └── types
-├── .dockerignore
-├── Dockerfile
-├── docker-compose.yml
-├── .eslintrc
-├── tsconfig.json
-├── README.md
-     
-
 ## 🚀 Despliegue
 
 - Vercel: https://digital-money-juan-manuel-herrero.vercel.app/
@@ -132,18 +108,28 @@ A continuación se presentan capturas de las secciones clave de la aplicación:
 
 Login:
 
+![Login Screenshot](./screenshots/loginA.jpg)
+![Login Screenshot](./screenshots/loginB.jpg)
 
 Dashboard:
 
+![Dashboard Screenshot](./screenshots/perfilA.jpg)
 
 Carga de Dinero:
 
+![Deposito Screenshot](./screenshots/depoA.jpg)
+![Transferencia Screenshot ](./screenshots/transA.jpg)
+![Tarjetas Screenshot ](./screenshots/tarjetaB.jpg)
+![Tarjetas Screenshot ](./screenshots/tarjetac.jpg)
 
 Actividad:
+
+![Filtros Screenshot](./screenshots/filtrosA.jpg)
 
 
 Pagos de Servicios:
 
+![Servicios Screenshot](./screenshots/ServicioA.jpg)
 
 
 ## ✍️ Autor / Equipo
