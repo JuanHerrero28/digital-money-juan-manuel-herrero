@@ -3,8 +3,7 @@ import InfoCard from "./components/InfoCard";
 
 const HeroContainer = styled.section`
   width: 100%;
-  height: 650px;
-  background-image: url("/assets/img-fond.png");
+  min-height: 100vh;
   background-size: cover;
   background-position: center;
   display: flex;

@@ -9,6 +9,14 @@ const Wrapper = styled.div`
   
   display: flex;
   flex-direction: column;
+
+  background-image: url("/assets/img-fond.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+
+  min-height: 100vh;
+  overflow-x: hidden;
 `;
 
 type Props = {

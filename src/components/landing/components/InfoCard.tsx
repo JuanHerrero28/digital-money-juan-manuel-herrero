@@ -30,6 +30,10 @@ const CardContainer = styled.div`
     font-weight: 400;
     color: #201F22;
   }
+
+  @media (max-width: 768px) {
+    border-radius: 25px;
+  }
 `;
 
 type InfoCardProps = {
