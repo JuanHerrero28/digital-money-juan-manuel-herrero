@@ -79,6 +79,7 @@ const Circle = styled.div`
 `;
 
 const Description = styled.div`
+font-size: 0.75rem;
   color: #201f22;
 `;
 
@@ -87,12 +88,13 @@ const Right = styled.div`
 `;
 
 const Amount = styled.div<{ tipo: string }>`
+font-size: 0.75rem;
   font-weight: bold;
   color: ${({ tipo }) => (tipo === "ingreso" ? "green" : "red")};
 `;
 
 const DateText = styled.div`
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   color: #7a7a7a;
 `;
 

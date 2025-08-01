@@ -22,6 +22,10 @@ const Container = styled.div`
   max-width: 900px;
   margin: 0 auto;
   gap: 2rem;
+
+  @media (max-width: 768px) {
+    padding: 1.2rem;
+  }
 `;
 
 const CardContainer = styled.div`
